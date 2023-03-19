@@ -3,7 +3,7 @@
   "name": "zenn",
   "postStartCommand": "git config --global include.path ${containerWorkspaceFolder}/.devcontainer/.gitconfig; docker-compose -f ./.devcontainer/docker-compose.yml up -d",
   "appPort": [
-    8000,
+    8000
   ],
   "image": "mcr.microsoft.com/vscode/devcontainers/universal:1.7.5",
   "settings": {
@@ -27,7 +27,7 @@
       "**/target/**": true
     }
   },
-  "remoteUser": "codespace",
+  "remoteUser": "root",
   "overrideCommand": false,
   "mounts": ["source=codespaces-linux-var-lib-docker,target=/var/lib/docker,type=volume"],
   "runArgs": [
@@ -40,8 +40,13 @@
 
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
-    "GitHub.vscode-pull-request-github"
-  ],
+	"GitHub.vscode-pull-request-github",
+	"yzhang.markdown-all-in-one",
+	"ICS.japanese-proofreading",
+	"TabNine.tabnine-vscode",
+	"DavidAnson.vscode-markdownlint",
+	"shd101wyy.markdown-preview-enhanced"
+],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
