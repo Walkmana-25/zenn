@@ -5,5 +5,5 @@ LABEL org.opencontainers.image.url https://github.com/bells17/zenn-template/pkgs
 LABEL org.opencontainers.image.source https://github.com/bells17/zenn-template
 WORKDIR /zenn
 EXPOSE 8000
-RUN npm install -g zenn-cli@0.1.109
+RUN npm install -g zenn-cli@latest
 CMD ["zenn", "preview"]
