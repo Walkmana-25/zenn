@@ -2,6 +2,7 @@ version: '3'
 services:
   zenn:
     image: ghcr.io/bells17/zenn:1.1.0
+    command: /home/codespace/.nodejs/current/bin/npx zenn preview
     volumes:
       - ../:/zenn
     ports:
