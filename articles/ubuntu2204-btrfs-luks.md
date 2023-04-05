@@ -12,10 +12,11 @@ published: false
 
 ### 要件
 
-#### PCの詳細について
+#### PCのスペック
 
-Column A | Column B | Column C
----------|----------|---------
- A1 | B1 | C1
- A2 | B2 | C2
- A3 | B3 | C3
+- デフォルトOS: Windows11 Home 64bit
+- CPU: Intel Core i7 12700H 14C20T
+- Memory: DDR5 4800 16GB（32GBに増設）
+- Storage: 512GB NVMESSD（もう一台512GBのSSDを増設）  
+- GPU: Nvidia RTX 3060 Laptop  
+- Windows Hello: 顔認証
