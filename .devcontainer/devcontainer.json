@@ -45,7 +45,10 @@
 	"ICS.japanese-proofreading",
 	"TabNine.tabnine-vscode",
 	"DavidAnson.vscode-markdownlint",
-	"shd101wyy.markdown-preview-enhanced"
+	"shd101wyy.markdown-preview-enhanced",
+	"dbankier.vscode-instant-markdown",
+	"walkme.Markdown-extension-pack",
+	"bierner.markdown-mermaid"
 ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
