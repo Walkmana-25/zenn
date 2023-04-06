@@ -22,7 +22,7 @@ published: false
 
 - ボリュームをLUKSを使用して暗号化する
 - LUKSの上にはlvmを作成
-- lvmの上にBtrfs論理パーティションを作ってrootにマウントする
+- lvmの上にBtrfsの論理ボリュームを作ってrootにマウントする
 - LUKSをTPMを使用してセキュアに自動復号化する
 
 ## 使用する技術のメリット
@@ -30,3 +30,12 @@ published: false
 ### LUKS
 
 LUKS (Linux Unified Key Setup) は、Linuxで使用できる暗号化ファイルシステムです。LUKSを使用してrootパーティションを暗号化することで、コンピューターが紛失した場合でもデータを保護できます。
+
+### LVM
+
+> LVM（logical volume manager）とは、複数のハードディスクやパーティションにまたがった記憶領域をひとつのボリュームグループにまとめ、単一の論理ボリューム（LV）として扱うことのできるディスク管理機能です。
+[IDCFrontier 論理ボリュームマネージャーより](https://www.idcf.jp/words/lvm.html)
+
+LVMを使用することによって、将来パーティションの構成を変更したくなった場合でも柔軟に対応できます。
+
+### btrfs
