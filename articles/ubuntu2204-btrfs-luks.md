@@ -29,4 +29,4 @@ published: false
 
 ### LUKS
 
-LUKS(Linux Unified Key Setup)とは、Linuxで使用することができる暗号化ファイルシステムです。LUKSでrootパーティションを暗号化することによってコンピューターの紛失時にデータを保護できます。
+LUKS (Linux Unified Key Setup) は、Linuxで使用できる暗号化ファイルシステムです。LUKSを使用してrootパーティションを暗号化することで、コンピューターが紛失した場合でもデータを保護できます。
