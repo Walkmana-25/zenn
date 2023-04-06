@@ -65,3 +65,7 @@ WindowsのBitLockerもTPMを使用してドライブを暗号化できます。
 1. TPMを搭載したPC（Windows 11がプリインストールされたPCなら必ず対応しています）
 2. UEFIを搭載しているPC
 3. Secure Bootが有効化されていること
+
+### 検証環境
+
+今回の手順は、Ubuntu22.04LTSをホストOSとして動作するKVM仮想マシン上にUbuntu22.04LTSをインストールすることで検証します。
