@@ -2,7 +2,7 @@
 title: "Ubuntu22.04をBtrfs+luks+LVM+TPMな環境にインストール"
 emoji: "✨"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["ubuntu", "debian","linux","btrfs","LUKS","lvm","tpm"]
+topics: ["ubuntu", "debian","linux","btrfs","LUKS"]
 published: false
 ---
 
@@ -29,5 +29,7 @@ Ubuntu22.04LTSを次の環境にインストールする
 
 ### LUKS
 
-LUKS
+LUKS(Linux Unified Key Setup)とは、Linuxで使用することができる暗号化ファイルシステムです。LUKSでrootパーティションを暗号化することによってコンピューターの紛失時にデータを保護できます。
+
+
 
