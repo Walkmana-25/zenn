@@ -1,22 +1,33 @@
 ---
-title: "Ubuntu22.04をWindows11と共存させながらゲーミングノートPCにインストールする"
+title: "Ubuntu22.04をBtrfs+luks+LVM+TPMな環境にインストール"
 emoji: "✨"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["ubuntu", "windows","linux","btrfs","luks"]
+topics: ["ubuntu", "debian","linux","btrfs","LUKS","lvm","tpm"]
 published: false
 ---
 
 ## はじめに
 
-マウスコンピューターのゲーミングノートPC G-Tune E5-165を入手しました。主に開発目的で使用する予定ですが、ゲームも楽しみたいと思い、デュアルブート構成でインストールしました。しかし、セキュアブートやファイルシステム関連で苦労したため、今回の手順を忘備録として残しておこうと思います。
+モバイルノートPCにUbuntuをインストールしている方は、次のような悩みを持っていることが多いのではないでしょうか。
 
-### 要件
+- 紛失時のデータ保護をどうするか
+- かと言ってLUKSは起動時にパスワードを入力する必要があり面倒くさい
+- バックアップを取ることが大変
 
-#### PCのスペック
+そこで今回はBtrfs,LUKS,lvm,tpmを組み合わせることで上記の問題を解決していこうと思います。
 
-- デフォルトOS: Windows11 Home 64bit
-- CPU: Intel Core i7 12700H 14C20T
-- Memory: DDR5 4800 16GB（32GBに増設）
-- Storage: 512GB NVMESSD（もう一台512GBのSSDを増設）  
-- GPU: Nvidia RTX 3060 Laptop  
-- Windows Hello: 顔認証
+## この記事のゴール
+
+Ubuntu22.04LTSを次の環境にインストールする
+
+- ボリュームをLUKSを使用して暗号化する
+- LUKSの上にはlvmを作成
+- lvmの上にBtrfs論理パーティションを作ってrootにマウントする
+- LUKSをTPMを使用してセキュアに自動復号化する
+
+## 使用する技術のメリット
+
+### LUKS
+
+LUKS
+
