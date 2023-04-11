@@ -35,7 +35,8 @@
     "--security-opt",
     "seccomp=unconfined",
     "--privileged",
-    "--init"
+    "--init",
+    "--add-host=host.docker.internal:host-gateway"
   ],
 
   // Add the IDs of extensions you want installed when the container is created.
@@ -48,7 +49,8 @@
 	"shd101wyy.markdown-preview-enhanced",
 	"dbankier.vscode-instant-markdown",
 	"walkme.Markdown-extension-pack",
-	"bierner.markdown-mermaid"
+	"bierner.markdown-mermaid",
+	"TabbyML.vscode-tabby"
 ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
