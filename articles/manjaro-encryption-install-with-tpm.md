@@ -99,9 +99,124 @@ Partition | Type | Mount Point
     lvcreate -L 9G system -n swap
 
     lvcreate -l 100%FREE system -n root
+    mkfsbtrfs /dev/mapper/system-root
     ```
 
+### OSのインストール
+
+1. Manjaro Linuxインストーラーを起動します。
+1. `ストレージデバイスを選択`までセットアップを続けます。
+1. `手動パーティション`を選択します。
+1. 次の画像のようにマウントポイントを指定します。
+    物理ディスク
+    /dev/vda1 : /boot/efi
+    /dev/vda2 : /boot
+    論理ディスク
+    /dev/mapper/system-root: /
+
+:::message
+インストールが完了しても再起動しないでください。
+:::
+
+### インストール後の設定
+
+1. ファイルシステムをマウントします。
+
+    ```bash
+    mount -o subvol=@ /dev/mapper/system-root /mnt
+    mount -o subvol=@home /dev/mapper/system-root /mnt/home
+    mount -o subvol=@cache /dev/mapper/system-root /mnt/var/cache
+    mount -o subvol=@log /dev/mapper/system-root /mnt/var/log
+    mount /dev/vda2 /mnt/boot
+    mount /dev/vda1 /mnt/boot/efi
+    ```
+
+1. chrootに入る
+
+    ```bash
+    #arch linuxの場合は、`arch-chroot`を使用
+    manjaro-chroot /mnt
+    ```
+
+1. mkinitcpioの設定
+
+    keyboard,encrypt,lvm2 フックをfilesystemの前に追加します。
+
+    ``` text
+    #/etc/mkinitcpio.conf
+    HOOKS=(... keyboard keymap block encrypt lvm2 ... filesystems ...)
+    ```
+
+1. mkinitcpioの生成
+
+    ```bash
+    mkinitcpio -p linux65
+    ```
+
+1. ブートローダーの設定
+
+    `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT`に次の内容を追記してください。UUIDは/dev/sdXXのUUIDに置き換えてください。
+
+    ```bash
+    #UUIDの確認方法
+    ls -al /dev/disk/by-uuid
+    ```
+
+    ```text
+    cryptdevice=UUID=device-UUID:cryptolvm root=/dev/mapper/system-root
+    ```
+
+1. 設定の適応
+
+    ```bash
+    update-grub
+    ```
+
+1. chrootを抜け、インストールディスクを抜き、再起動します。起動時にパスワードを入力してください。
+
+### 休止状態の設定
+
+1. swap paritionの作成
+
+    ```bash
+    mkswap /dev/mapper/system-swap
+    ```
+
+1. fstabの設定
+
+    次の内容を`/etc/fstab`に追記します。
+
+    ```text
+    /dev/mapper/system-swap none swap defaults 0 0
+    ```
+
+1. mkinitcpioの設定
+    `/etc/mkinitcpio.conf`を開き、`HOOKS`の`filesystems`の前に`resume`を追加します。
+
+1. ブートローダーの設定
+    `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT`の`root=`の前に次の内容を追記してください。
+
+    ```text
+    resume=/dev/mapper/system-swap
+    ```
+
+1. 設定を適応します
+
+    ```bash
+    mkinitcpio -p linux65
+    update-grub
+    ```
+
+1. 一度再起動します
+
+1. テスト
+
+    ここで休止状態が機能するかテストしてください。
+
+### セキュアブートの設定
 
 ## 参考文献
 
 [dm-crypt/システム全体の暗号化](https://wiki.archlinux.jp/index.php/Dm-crypt/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%85%A8%E4%BD%93%E3%81%AE%E6%9A%97%E5%8F%B7%E5%8C%96#LVM_on_LUKS)
+[【Linux】ボリュームのUUIDを確認する方法](https://zenn.dev/supersatton/articles/bb82cfcf0a2b1f)
+https://wiki.archlinux.jp/index.php/%E9%9B%BB%E6%BA%90%E7%AE%A1%E7%90%86/%E3%82%B5%E3%82%B9%E3%83%9A%E3%83%B3%E3%83%89%E3%81%A8%E3%83%8F%E3%82%A4%E3%83%90%E3%83%8D%E3%83%BC%E3%83%88#.E3.83.8F.E3.82.A4.E3.83.90.E3.83.8D.E3.83.BC.E3.82.B7.E3.83.A7.E3.83.B3
