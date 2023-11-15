@@ -17,6 +17,21 @@
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 		
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"shd101wyy.markdown-preview-enhanced",
+				"yzhang.markdown-all-in-one",
+				"yzane.markdown-pdf",
+				"bierner.markdown-preview-github-styles",
+				"bierner.markdown-mermaid",
+				"DavidAnson.vscode-markdownlint",
+				"bierner.markdown-emoji",
+				"mdickin.markdown-shortcuts",
+				"bpruitt-goddard.mermaid-markdown-syntax-highlighting"
+			]
+		}
 	}
 		// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
