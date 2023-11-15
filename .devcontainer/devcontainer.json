@@ -1,59 +1,35 @@
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.229.0/containers/codespaces-linux
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-  "name": "zenn",
-  "postStartCommand": "git config --global include.path ${containerWorkspaceFolder}/.devcontainer/.gitconfig; docker-compose -f ./.devcontainer/docker-compose.yml up -d",
-  "appPort": [
-    8000
-  ],
-  "image": "mcr.microsoft.com/vscode/devcontainers/universal:1.7.5",
-  "settings": {
-    "go.toolsManagement.checkForUpdates": "local",
-    
-    "python.defaultInterpreterPath": "/opt/python/latest/bin/python",
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
-    "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
-    "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
-    "python.linting.banditPath": "/usr/local/py-utils/bin/bandit",
-    "python.linting.flake8Path": "/usr/local/py-utils/bin/flake8",
-    "python.linting.mypyPath": "/usr/local/py-utils/bin/mypy",
-    "python.linting.pycodestylePath": "/usr/local/py-utils/bin/pycodestyle",
-    "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
-    "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
-    "lldb.executable": "/usr/bin/lldb",
-    "files.watcherExclude": {
-      "**/target/**": true
-    }
-  },
-  "remoteUser": "zenn",
-  "overrideCommand": false,
-  "mounts": ["source=codespaces-linux-var-lib-docker,target=/var/lib/docker,type=volume"],
-  "runArgs": [
-    "--cap-add=SYS_PTRACE",
-    "--security-opt",
-    "seccomp=unconfined",
-    "--privileged",
-    "--init",
-    "--add-host=host.docker.internal:host-gateway"
-  ],
+	"name": "Existing Dockerfile",
+	"build": {
+		// Sets the run context to one level up instead of the .devcontainer folder.
+		"context": "..",
+		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
+		"dockerfile": "../Dockerfile"
+	},
+	"remoteUser": "zenn",
+	"appPort": [
+		8000
+	],
+	"image": "mcr.microsoft.com/vscode/devcontainers/universal:latest",
+	"postCreateCommand": "npx zenn",
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+		
+	}
+		// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
 
-  // Add the IDs of extensions you want installed when the container is created.
-  "extensions": [
-	"GitHub.vscode-pull-request-github",
-	"yzhang.markdown-all-in-one",
-	"ICS.japanese-proofreading",
-	"DavidAnson.vscode-markdownlint",
-	"shd101wyy.markdown-preview-enhanced",
-	"dbankier.vscode-instant-markdown",
-	"walkme.Markdown-extension-pack",
-	"bierner.markdown-mermaid",
-	"TabbyML.vscode-tabby"
-],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
+	// Uncomment the next line to run commands after the container is created.
+	// "postCreateCommand": "cat /etc/os-release",
 
-  // "oryx build" will automatically install your dependencies and attempt to build your project
-  "postCreateCommand": "oryx build -p virtualenv_name=.venv --log-file /tmp/oryx-build.log --manifest-dir /tmp || echo 'Could not auto-build. Skipping.'"
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "devcontainer"
 }
