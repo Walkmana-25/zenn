@@ -8,8 +8,7 @@
   "image": "mcr.microsoft.com/vscode/devcontainers/universal:1.7.5",
   "settings": {
     "go.toolsManagement.checkForUpdates": "local",
-    "go.useLanguageServer": true,
-    "go.gopath": "/go",
+    
     "python.defaultInterpreterPath": "/opt/python/latest/bin/python",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
@@ -27,7 +26,7 @@
       "**/target/**": true
     }
   },
-  "remoteUser": "root",
+  "remoteUser": "zenn",
   "overrideCommand": false,
   "mounts": ["source=codespaces-linux-var-lib-docker,target=/var/lib/docker,type=volume"],
   "runArgs": [
@@ -44,7 +43,6 @@
 	"GitHub.vscode-pull-request-github",
 	"yzhang.markdown-all-in-one",
 	"ICS.japanese-proofreading",
-	"TabNine.tabnine-vscode",
 	"DavidAnson.vscode-markdownlint",
 	"shd101wyy.markdown-preview-enhanced",
 	"dbankier.vscode-instant-markdown",

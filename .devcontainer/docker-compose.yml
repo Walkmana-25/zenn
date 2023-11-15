@@ -2,7 +2,7 @@ version: '3'
 services:
   zenn:
     image: ghcr.io/bells17/zenn
-    command: /home/codespace/.nodejs/current/bin/npx zenn preview
+    command: /home/codespace/.nodejs/current/bin/npm install zenn-cli@latest && /home/codespace/.nodejs/current/bin/npx zenn preview
     volumes:
       - ../:/zenn
     ports:
