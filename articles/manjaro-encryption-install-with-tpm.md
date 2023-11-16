@@ -138,7 +138,7 @@ Partition | Type | Mount Point
     manjaro-chroot /mnt
     ```
 
-1. mkinitcpioの設定
+1. initramfsの設定
 
     keyboard,encrypt,lvm2 フックをfilesystemの前に追加します。
 
@@ -147,7 +147,7 @@ Partition | Type | Mount Point
     HOOKS=(... keyboard keymap block encrypt lvm2 ... filesystems ...)
     ```
 
-1. mkinitcpioの生成
+1. initramfsの生成
 
     ```bash
     mkinitcpio -p linux65
@@ -190,7 +190,7 @@ Partition | Type | Mount Point
     /dev/mapper/system-swap none swap defaults 0 0
     ```
 
-1. mkinitcpioの設定
+1. initramfsの設定
     `/etc/mkinitcpio.conf`を開き、`HOOKS`の`filesystems`の前に`resume`を追加します。
 
 1. ブートローダーの設定
@@ -215,8 +215,86 @@ Partition | Type | Mount Point
 
 ### セキュアブートの設定
 
+1. 必要なパッケージをインストール
+
+    ```bash
+    pacman -S efitools sbctl
+    ```
+
+1. 現在の設定のバックアップ
+
+    ```bash
+    for var in PK KEK db dbx ; do efi-readvar -v $var -o old_${var}.esl ; done
+    ```
+
+1. ファームウェアをSetup Modeにする
+
+    機種によって方法が違います。
+
+    確認方法
+
+    ```bash
+    bootctl status
+    ```
+
+    ここで、`Secure Boot: disabled (setup)`となっていれば成功です。
+
+1. キーの作成、登録
+
+    ```bash
+    sbctl create-keys
+    sbctl enroll-keys -m
+    ```
+
+:::message alert
+必ず`sbctl enroll-keys -m`を実行する時に`-m`をつけてください。
+:::
+
+1. 再びセキュアブートの状態を確認
+
+    ```bash
+    sbctl status
+    ```
+
+    `Installed: sbctl is installed`と表示されていたら成功です。
+
+1. セキュアブートを作動させるためのファイルを確認
+
+    ```bash
+    sbctl verify
+    ```
+
+1. セキュアブートに対応したブートローダーのインストール
+
+    ```bash
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
+    ```
+
+1. 必要なファイルを署名
+
+    例:
+
+    ```bash
+    sbctl sign -s /boot/efi/EFI/GRUB/grubx64.efi
+    sbctl sign -s /boot/efi/EFI/boot/bootx64.efi
+    sbctl sign -s /boot/linux65-x86_64
+    ```
+
+1. 正しく署名されているか確認
+
+    ```bash
+    sbctl verify
+    ```
+
+1. UEFIからセキュアブートを有効化する
+
+1. 再起動をして動作確認
+
 ## 参考文献
 
 [dm-crypt/システム全体の暗号化](https://wiki.archlinux.jp/index.php/Dm-crypt/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%85%A8%E4%BD%93%E3%81%AE%E6%9A%97%E5%8F%B7%E5%8C%96#LVM_on_LUKS)
 [【Linux】ボリュームのUUIDを確認する方法](https://zenn.dev/supersatton/articles/bb82cfcf0a2b1f)
-https://wiki.archlinux.jp/index.php/%E9%9B%BB%E6%BA%90%E7%AE%A1%E7%90%86/%E3%82%B5%E3%82%B9%E3%83%9A%E3%83%B3%E3%83%89%E3%81%A8%E3%83%8F%E3%82%A4%E3%83%90%E3%83%8D%E3%83%BC%E3%83%88#.E3.83.8F.E3.82.A4.E3.83.90.E3.83.8D.E3.83.BC.E3.82.B7.E3.83.A7.E3.83.B3
+[電源管理/サスペンドとハイバネート](https://wiki.archlinux.jp/index.php/%E9%9B%BB%E6%BA%90%E7%AE%A1%E7%90%86/%E3%82%B5%E3%82%B9%E3%83%9A%E3%83%B3%E3%83%89%E3%81%A8%E3%83%8F%E3%82%A4%E3%83%90%E3%83%8D%E3%83%BC%E3%83%88#.E3.83.8F.E3.82.A4.E3.83.90.E3.83.8D.E3.83.BC.E3.82.B7.E3.83.A7.E3.83.B3)
+[Unified Extensible Firmware Interface/セキュアブート](https://wiki.archlinux.jp/index.php/Unified_Extensible_Firmware_Interface/%E3%82%BB%E3%82%AD%E3%83%A5%E3%82%A2%E3%83%96%E3%83%BC%E3%83%88)
+[Clevis](https://wiki.archlinux.jp/index.php/Clevis)
+[Ubuntu 22.04でTPM2.0を使ってluksを自動復号化をする](https://zenn.dev/walkmana_25/articles/ubuntu2204-tpm2)
