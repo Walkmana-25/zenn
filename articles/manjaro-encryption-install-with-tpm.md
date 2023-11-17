@@ -3,7 +3,7 @@ title: "Manjaro Linuxで自動復号化のディスク暗号化と休止状態�
 emoji: "🐥"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Linux","Manjaro","TPM","Hibernete", "Arch"]
-published: false
+published: true
 ---
 
 ## はじめに
