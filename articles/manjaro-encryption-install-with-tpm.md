@@ -1,5 +1,5 @@
 ---
-title: "Manjaro LinuxでBitLockerみたいにインストールする"
+title: "Manjaro Linuxで自動復号化のディスク暗号化と休止状態の実現方法"
 emoji: "🐥"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Linux","Manjaro","TPM","Hibernete", "Arch"]
@@ -23,8 +23,8 @@ Manjaro Linuxを使用しましたが、Arch Linux系列のOSでも使用でき�
 Manjaro Linuxを次の構成でインストールすることを目指します。
 
 - LVM on Luks (論理ディスクを暗号化する)
-- TPM2を使用して自動復号化する
-- 休止状態を使用できる状態とする
+- TPM2を使用して自動復号化
+- 休止状態を使用できる状態
 - セキュアブート
 - セキュリティの確保
 
@@ -289,6 +289,43 @@ Partition | Type | Mount Point
 1. UEFIからセキュアブートを有効化する
 
 1. 再起動をして動作確認
+
+### TPM2によるディスク復号化
+
+1. 必要パッケージのインストール
+
+    ```bash
+    pacman -S yay clevis
+
+    #Run as user
+    yay -S mkinitcpio-clevis-hook
+    ```
+
+1. 鍵を登録する
+
+    ```bash
+    clevis luks bind -d /dev/vda3 tpm2 '{"hash":"sha256","key":"rsa"}'
+    ```
+
+1. 鍵を検証する
+
+    ```bash
+    clevis luks list -d /dev/vda3
+    ```
+
+1. initramfsの設定
+
+    `/etc/mkinitcpio.conf`を開き、`HOOKS`の`encrypt`の前に`clevis`を追加する
+
+1. initramfsの再生成
+
+    ```bash
+    mkinitcpio -p linux65
+    ```
+
+1. 再起動をして動作確認
+
+これにてインストール完了です。
 
 ## 参考文献
 
