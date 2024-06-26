@@ -26,8 +26,9 @@ Alied TelesisのL3 Switchであるx510-28GTXを購入し、自宅で運用して
 
 ## 1. access-list hardware(list)の作成
 
-ハードウェアアクセスリストはエントリーを1つしか持つことができない。
-よって、access-list hardware(list)を作成し、その中に複数のエントリーを追加する。公式マニュアルにはシーケンス番号を利用した設定とある。  
+ハードウェアアクセスリストはエントリーを1つしか持つことができない。そのため、暗黙のdenyは存在しない。
+よって、access-list hardware(list)を作成し、その中に複数のエントリーを追加する。  
+公式マニュアルにはシーケンス番号を利用した設定とある。  
 [公式マニュアルの該当ページ](https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.3-0.1/001763b/docs/overview-30.html#sec5)
 
 ```shell
