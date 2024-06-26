@@ -48,6 +48,21 @@ awplus(config-ip-hw-acl)# deny ip 192.168.100.0/24 192.16.0.0/24
 フィルターは上から順（シーケンス番号が低い順）に評価されます。
 :::
 
+3. vLan access mapの作成
+
+vLanアクセスマップを使用して、フィルタリングに使用するハードウェアアクセスリストを指定する。
+
+```shell
+# deny-ruleという名前のアクセスマップを作成し、アクセスリストlistnameを適応
+awplus(config)# vlan access-map deny-rule
+awplus(config-vlan-access-map)# match access-group listname
+```
+
+:::message
+複数アクセスリストを適応した場合、追加した順で評価される。
+:::
+
+
 
 ## 参考文献
 
