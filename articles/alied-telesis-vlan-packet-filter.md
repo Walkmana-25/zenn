@@ -19,7 +19,7 @@ Alied TelesisのL3 Switchであるx510-28GTXを購入し、自宅で運用して
 ## 手順
 
 1. Hardware access list (list)を作成
-2. Hardware access list (IP)を作成
+2. Hardware access list (seq entry)を作成
 3. vLan access mapの作成
 4. vLanにaccess mapを適応
 5. 動作確認
@@ -33,6 +33,19 @@ Alied TelesisのL3 Switchであるx510-28GTXを購入し、自宅で運用して
 ```shell
 awplus(config)# access-list hardware listname
 ```
+
+## 2. access-list hardware(seq entry)の作成
+
+```shell
+# 192.168.100.0/24に所属するホストから192.16.0.0/24へのIPパケットを破棄
+awplus(config-ip-hw-acl)# deny ip 192.168.100.0/24 192.16.0.0/24
+```
+
+詳細なコマンドについては[公式リファレンス](https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.2a-0.1/001763a/docs/access-list_hardware(seq_entry)@912HWACL.html)を参照してください。
+
+:::message
+フィルターは上から順（シーケンス番号が低い順）に評価されます。
+:::
 
 
 ## 参考文献
