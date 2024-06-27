@@ -12,16 +12,16 @@ Alied TelesisのL3 Switchであるx510-28GTXを購入し、自宅で運用して
 
 ## 前提条件
 
-- vLanが設定されていること
-- vLan InterfaceにIPアドレスが設定されていること
+- VLANが設定されていること
+- VLAN InterfaceにIPアドレスが設定されていること
   - L3スイッチとして稼働するように設定されていること
 
 ## 手順
 
 1. Hardware access list (list)を作成
 2. Hardware access list (seq entry)を作成
-3. vLan access mapの作成
-4. vLanにaccess mapを適応
+3. VLAN access mapの作成
+4. VLANにaccess mapを適応
 5. 動作確認
 
 ## 1. access-list hardware(list)の作成
@@ -48,9 +48,9 @@ awplus(config-ip-hw-acl)# deny ip 192.168.100.0/24 192.16.0.0/24
 フィルターは上から順（シーケンス番号が低い順）に評価される。
 :::
 
-## 3. vLan access mapの作成
+## 3. VLAN access mapの作成
 
-vLanアクセスマップを使用して、フィルタリングに使用するハードウェアアクセスリストを指定する。
+VLANアクセスマップを使用して、フィルタリングに使用するハードウェアアクセスリストを指定する。
 
 ```shell
 # deny-ruleという名前のアクセスマップを作成し、アクセスリストlistnameを適応
@@ -62,12 +62,23 @@ awplus(config-vlan-access-map)# match access-group listname
 複数アクセスリストを適応した場合、追加した順で評価される。
 :::
 
-## 4. vLanにaccess mapを適応
+## 4. VLANにaccess mapを適応
 
 ```shell
-#vlan48にvlanアクセスマップdeny-ruleを適応する
+#vlan48にVLANアクセスマップdeny-ruleを適応する
 awplus(config)# vlan filter deny-rule vlan-list 48 input
 ```
+
+## 5. 動作確認
+
+```shell
+#VLANアクセスマップの情報を表示
+awplus# show vlan access-map
+#VLANインターフェースに適応したVLANアクセスマップdeny-ruleの情報を表示する
+awplus# show vlan filter deny-rule
+```
+
+適宜、pingコマンドを使用してパケットフィルターが正常に動作しているか確認する。
 
 
 ## 参考文献
