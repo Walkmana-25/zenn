@@ -45,10 +45,10 @@ awplus(config-ip-hw-acl)# deny ip 192.168.100.0/24 192.16.0.0/24
 詳細なコマンドについては[公式リファレンス](https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.2a-0.1/001763a/docs/access-list_hardware(seq_entry)@912HWACL.html)を参照してください。
 
 :::message
-フィルターは上から順（シーケンス番号が低い順）に評価されます。
+フィルターは上から順（シーケンス番号が低い順）に評価される。
 :::
 
-3. vLan access mapの作成
+## 3. vLan access mapの作成
 
 vLanアクセスマップを使用して、フィルタリングに使用するハードウェアアクセスリストを指定する。
 
@@ -62,6 +62,12 @@ awplus(config-vlan-access-map)# match access-group listname
 複数アクセスリストを適応した場合、追加した順で評価される。
 :::
 
+## 4. vLanにaccess mapを適応
+
+```shell
+#vlan48にvlanアクセスマップdeny-ruleを適応する
+awplus(config)# vlan filter deny-rule vlan-list 48 input
+```
 
 
 ## 参考文献
@@ -70,3 +76,6 @@ https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.2a-0.1/001763a
 https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.3-0.1/001763b/docs/access-group@116INTERFACE.html
 https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.3-0.1/001763b/docs/overview-33.html
 https://www.allied-telesis.co.jp/support/list/switch/x510/rel/5.4.7-0.1/613-001763_S/docs/vlan_access-map@100CONFIG.html
+https://www.allied-telesis.co.jp/support/list/awp/rel/5.5.0-1.1/613-001763_AJ/docs/vlan_filter@100CONFIG.html
+https://www.allied-telesis.co.jp/support/list/awp/rel/5.5.0-1.1/613-001763_AJ/docs/show_vlan_access-map@020ENABLEEXEC.html
+https://www.allied-telesis.co.jp/support/list/awp/rel/5.5.0-1.1/613-001763_AJ/docs/show_vlan_filter@020ENABLEEXEC.html
