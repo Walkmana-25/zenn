@@ -3,7 +3,7 @@ title: "Alied TelesisのL3スイッチでVLANパケットフィルタを設定�
 emoji: "📝"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [network, x510, vlan, aliedtelesis]
-published: false
+published: true
 ---
 
 ## 目的
