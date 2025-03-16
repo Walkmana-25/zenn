@@ -3,7 +3,7 @@ title: "Ubuntuにzramを導入する"
 emoji: "📝"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ubuntu", "zram", "linux"]
-published: false
+published: true
 ---
 
 ## zramとは？
