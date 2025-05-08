@@ -364,5 +364,6 @@ GitHubでPull Request、Releaseした際の結果です。
 ![pull_request](/images/rust-actions/pull_request_result.png)
 
 ### Release
+
 ![release](/images/rust-actions/releases_result.png)
 ![artifact](/images/rust-actions/releases_artifact.png)
