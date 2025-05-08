@@ -37,3 +37,9 @@ published: false
       - 特にWindowsのビルドがものすごく遅い
 - バイナリの署名
   - 筆者が署名用の鍵を持っていないため、バイナリの署名は行っていない
+  
+## 前提条件
+
+- GitHub, GitHub Actionsの知識
+- Rustの基本的な知識
+
