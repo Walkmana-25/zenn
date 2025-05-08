@@ -354,3 +354,15 @@ pre-build = [
 ## OpenSSLビルドのための依存関係
 
 全てのターゲットでgcc、perl、makeなどのパッケージをインストールしているのはOpenSSLのビルドに必要なためです。これにより、暗号化機能を含むプログラムも問題なくクロスコンパイルできます。
+
+## 結果
+
+GitHubでPull Request、Releaseした際の結果です。
+
+### Pull Request
+
+![pull_request](/images/rust-actions/pull_request_result.png)
+
+### Release
+![release](/images/rust-actions/releases_result.png)
+![artifact](/images/rust-actions/releases_artifact.png)
