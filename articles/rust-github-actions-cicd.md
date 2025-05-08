@@ -20,7 +20,7 @@ published: false
   - Release時に各OSに向けたバイナリを自動的に生成する
 - リリース自動化
   - GitHub Releaseをトリガーに、テストとビルドを実行
-  - ビルドされたバイナリをリリースアーティファクトとして添付
+  - ビルドされたバイナリを成果物として添付
 - OpenSSL統合対応
   - Rustプロジェクトでの鬼門となるOpenSSLの依存関係を適切に処理
 - 広範囲なLinux互換性
@@ -45,6 +45,33 @@ published: false
 
 ## ワークフローの構築
 
+今回使うサンプルプロジェクトのディレクトリは以下の通りです。
+また、このプロジェクトのGitHubリポジトリはこちらです。
+[https://github.com/Walkmana-25/rust-actions-example](https://github.com/Walkmana-25/rust-actions-example)
+
+```sh
+sh-3.2$ tree -C -a -I "target" -I ".git"
+.
+|-- .github
+|   `-- workflows
+|       |-- release.yml
+|       `-- testing.yml
+|-- .gitignore
+|-- Cargo.lock
+|-- Cargo.toml
+|-- Cross.toml
+|-- LICENSE
+|-- README.md
+|-- doc.md
+`-- src #今回使用するサンプルプロジェクトのソース
+    |-- args.rs
+    |-- main.rs
+    |-- utils.rs
+    `-- weather.rs
+
+4 directories, 13 files
+```
+
 ### サンプルプロジェクトの概要
 
 説明のためにサンプルプロジェクトを構築しました。このプロジェクトは、Rustで開発した天気情報取得コマンドラインアプリケーションです。
@@ -62,3 +89,4 @@ published: false
 - OpenSSL依存関係の適切な管理
   - `vendored` featureを使用してOpenSSLをソースからコンパイル
 - 簡単なテストコードを実装しました
+
