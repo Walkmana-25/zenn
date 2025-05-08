@@ -111,3 +111,83 @@ Today's average temperature: 16.13°C
 Yesterday's average temperature: 17.34°C
 ```
 
+### testing.ymlの作成
+
+まず、testing.ymlを作成します。このファイルは、Pull Request時に実行されるワークフローです。
+
+#### testingワークフローの基本設定
+
+```toml
+name: Rust Testing
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+# 以下にジョブを定義
+```
+
+#### コード品質チェックの実装
+
+最初のジョブでは、clippyとfmtの二つのリンタを走らせ、コードの静的解析を行います。
+
+```toml
+check:
+  name: Rustfmt
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+    - name: Install Rust fmt
+      run: rustup component add rustfmt
+    - name: Install Rust clippy
+      run: rustup component add clippy
+    - name: Run rustfmt
+      run: cargo fmt --all -- --check
+    - name: Run clippy
+      run: cargo clippy --all-targets --all-features -- -D warnings
+```
+
+このジョブでは、以下の処理を行っています：
+
+- `Swatinem/rust-cache@v2`アクションを使用して依存関係をキャッシュし、ビルド時間を短縮
+- rustfmtによるコードスタイルの検証
+- clippyによる静的解析（D warningsオプションで警告をエラーとして扱う）
+
+#### マルチプラットフォームテストの実装
+
+次のジョブでは、複数のOSでのビルドとテストを実行します。
+
+```toml
+test:
+  name: Test
+  runs-on: ${{ matrix.os }}
+  needs: ["check"]
+  strategy:
+    matrix:
+      os: [ubuntu-latest, macos-latest, windows-latest]
+  steps:
+    - uses: actions/checkout@v3
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+    - name: Test Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
+```
+
+このジョブの特徴は以下の通りです：
+
+- `needs: ["check"]`により、コード品質チェックが成功した後にのみ実行される
+- matrixを使用して、Ubuntu、macOS、Windowsの3つの環境で同時にテストを実行
+  - 各プラットフォームで`cargo build`と`cargo test`を実行
+- matrixの記述を変更することで、テスト対象のプラットフォームを変更できます。
+
