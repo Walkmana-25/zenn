@@ -90,3 +90,24 @@ sh-3.2$ tree -C -a -I "target" -I ".git"
   - `vendored` featureを使用してOpenSSLをソースからコンパイル
 - 簡単なテストコードを実装しました
 
+#### サンプルプロジェクトの実際の動作例
+
+```sh
+sh-3.2$ ./rust-actions-example --latitude 35.41 --longitude 139.45 #東京都千代田区の緯度経度
+Fetching weather data for latitude: 35.41, longitude: 139.45...
+
+--- Hourly Weather Data (Every 6 Hours) ---
+2025-05-07 00:00: 19.9°C
+2025-05-07 06:00: 21.0°C
+2025-05-07 12:00: 16.1°C
+2025-05-07 18:00: 13.1°C
+2025-05-08 00:00: 16.8°C
+2025-05-08 06:00: 19.9°C
+2025-05-08 12:00: 15.1°C
+2025-05-08 18:00: 13.1°C
+
+--- Average Temperatures ---
+Today's average temperature: 16.13°C
+Yesterday's average temperature: 17.34°C
+```
+
