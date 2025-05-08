@@ -191,3 +191,162 @@ test:
   - 各プラットフォームで`cargo build`と`cargo test`を実行
 - matrixの記述を変更することで、テスト対象のプラットフォームを変更できます。
 
+### release.ymlの作成
+
+```yaml
+name: Release
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - v*
+
+env:
+  CARGO_TERM_COLOR: always
+
+```
+
+このワークフローは`v`で始まるタグ（例：`v1.0.0`）がプッシュされたときに起動します。
+`permissions`セクションでは、GitHub Releasesにファイルをアップロードするために必要な書き込み権限を設定しています。
+
+#### ジョブの連携とテスト実行
+
+```yaml
+jobs:
+  Test:
+    uses: ./.github/workflows/testing.yml
+
+  build:
+    needs: [Test]
+    # 以下省略
+
+```
+
+リリースプロセスの最初のステップとして、別ファイル（`testing.yml`）で定義されたテストワークフローを実行します。`needs: [Test]`の設定により、テストが成功した場合のみビルドジョブが実行されます。
+
+#### マトリックスビルドによる複数環境対応
+
+```yaml
+strategy:
+  fail-fast: false
+  matrix:
+    include:
+      - target: x86_64-unknown-linux-gnu
+        extension: ""
+        runner: ubuntu-latest
+        cross: true
+      - target: x86_64-pc-windows-msvc
+        extension: ".exe"
+        runner: windows-latest
+        cross: false
+      # 他のターゲット設定...
+
+```
+
+マトリックス戦略の真価はここで発揮されます。各ターゲット環境に対して以下の情報を定義しています：
+
+- **target**: Rustのターゲットトリプル
+- **extension**: 実行ファイルの拡張子（Windowsの場合は`.exe`）
+- **runner**: ビルドを実行するGitHubの環境
+- **cross**: crossを使ったクロスコンパイルが必要かどうか
+
+`fail-fast: false`の設定により、一部のビルドが失敗しても他のビルドは継続して実行されるため、可能な限り多くのプラットフォーム向けバイナリを提供できます。
+
+#### 環境に応じたビルドプロセス
+
+```yaml
+steps:
+  # チェックアウトと依存関係のインストールは省略
+
+  - name: Install cross (if needed)
+    if: ${{ matrix.cross }}
+    run: cargo install cross --git <https://github.com/cross-rs/cross>
+
+  - name: Build Project on cross
+    if: ${{ matrix.cross }}
+    run: |
+        cross build --release --target ${{ matrix.target }} --verbose
+  - name: Build Project
+    if: ${{ !matrix.cross }}
+    run: |
+      rustup target add ${{ matrix.target }}
+      cargo build --release --target ${{ matrix.target }} --verbose
+
+```
+
+ビルドプロセスは環境によって異なります：
+
+1. クロスコンパイルが必要な場合（例：Linuxランナーでarm64向けビルド）は、`cross`ツールを使用
+2. ネイティブビルドの場合は、`rustup`でターゲットを追加してから`cargo build`を実行
+
+この分岐により、各環境に最適なビルド方法を選択できます。
+
+#### 成果物の管理とリリース
+
+```yaml
+- name: Rename Artifacts
+  shell: bash
+  run: |
+    mv target/${{ matrix.target }}/release/${{ env.PROJECT_NAME }}{,-${{ github.ref_name }}-${{ matrix.target }}${{ matrix.extension }}}
+
+- name: Release Artifacts
+  uses: softprops/action-gh-release@v2
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    files: |
+      target/${{ matrix.target }}/release/${{ env.PROJECT_NAME }}-${{ github.ref_name }}-${{ matrix.target }}${{ matrix.extension }}
+
+```
+
+最後のステップでは、`softprops/action-gh-release`アクションを使用してGitHub Releasesにアップロードします。
+
+このワークフローの実行結果として、リリースページには各プラットフォーム向けのバイナリが自動的に添付され、ユーザーは自分の環境に合ったバイナリを簡単にダウンロードできるようになります。
+
+
+### cross.toml
+
+今回は、Linuxをターゲットにしたビルドをする際にcrossを使用します。：
+
+```toml
+[target.x86_64-unknown-linux-gnu]
+image = "ghcr.io/cross-rs/x86_64-unknown-linux-gnu:main-centos"
+pre-build = [
+    "sed -i /etc/yum.repos.d/*.repo -e 's!^mirrorlist!#mirrorlist!' -e 's!^#baseurl=http://mirror.centos.org/!baseurl=https://vault.centos.org/!'",
+    "sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf",
+    "yum update -y && yum install -y gcc perl make perl-IPC-Cmd"
+]
+
+# 他のターゲット定義...
+```
+
+互換性を考慮したコンテナ選択
+x86_64およびaarch64ターゲットにはCentOS 7ベースのイメージを指定しています。CentOS 7は古いバージョンのglibcを使用しているため、生成されるバイナリは新しいLinuxディストリビューションと古いディストリビューション両方で動作します。このアプローチはcargoのビルドにも使用されています。
+
+#### リポジトリとパッケージ管理
+
+EOLに達したCentOSを使用する際の注意点として、リポジトリの設定変更が必要です：
+
+```bash
+*# ミラーリストをVaultアーカイブに変更*
+sed -i /etc/yum.repos.d/*.repo -e 's!^mirrorlist!#mirrorlist!' -e 's!^#baseurl=http://mirror.centos.org/!baseurl=https://vault.centos.org/!'
+
+*# fastestmirrorプラグインを無効化（問題回避のため）*
+sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+```
+
+#### ターゲット固有の設定
+
+armv7アーキテクチャに対しては異なるアプローチを取っています：
+
+```toml
+[target.armv7-unknown-linux-gnueabihf]
+pre-build = [
+    "apt-get update && apt-get install -y crossbuild-essential-armhf",
+]
+```
+
+このターゲットではDebianベースのイメージを使用し、ARM向けのクロスコンパイルツールチェーンをインストールしています。(armv7用のcentos7イメージが無かった。)
