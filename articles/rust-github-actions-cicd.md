@@ -374,3 +374,34 @@ Releaseを作成すると、以下のように自動的にビルドとリリー�
 ![release](/images/rust-actions/releases_result.png)
 [https://github.com/Walkmana-25/rust-actions-example/releases/tag/v0.0.6](https://github.com/Walkmana-25/rust-actions-example/releases/tag/v0.0.6)
 ![artifact](/images/rust-actions/releases_artifact.png)
+
+## まとめ
+
+この記事では、Rustプロジェクト向けのGitHub Actionsを用いた実用的なCI/CDパイプラインの構築方法を解説しました。主なポイントは以下の通りです：
+
+1. **効率的なテスト自動化**
+   - Pull Request時に複数OSでの自動テスト実行
+   - コード品質チェック（rustfmt、clippy）の自動化
+
+2. **クロスプラットフォームビルドの実現**
+   - matrixを活用した複数プラットフォーム（Linux、macOS、Windows、ARM）向けのビルド
+   - crossツールを利用したクロスコンパイル環境の構築
+
+3. **リリース自動化**
+   - タグプッシュによる自動リリースフロー
+   - 複数プラットフォーム向けバイナリの自動生成と添付
+
+4. **互換性の確保**
+   - CentOS 7ベースイメージによる広範囲なLinux互換性の実現
+   - OpenSSL依存関係の適切な管理
+
+このワークフローが誰かの参考になりましたら幸いです。
+
+## 参考資料
+
+- [GitHub Actions 公式ドキュメント](https://docs.github.com/ja/actions)
+- [Rust cross-compilation tools](https://github.com/cross-rs/cross)
+- [cargo 公式ドキュメント](https://doc.rust-lang.org/cargo/)
+- [GitHub ActionsでRustのプロジェクトをビルドしてReleasesにバイナリを置く](https://qiita.com/okmt765/items/ad3cdfb5850e68edcef0)
+- [RustプロジェクトのキャッシュをするGitHub Action：Rust Cacheメモ [blessed.rsシリーズ24]](https://zenn.dev/kotabrog/articles/a3c3033f96e9ec)
+
