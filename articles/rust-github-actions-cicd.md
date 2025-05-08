@@ -361,9 +361,16 @@ GitHubでPull Request、Releaseした際の結果です。
 
 ### Pull Request
 
+Pull Requestを作成すると、このように自動的にテストが実行されます。
+
+[https://github.com/Walkmana-25/rust-actions-example/actions/runs/14812038654](https://github.com/Walkmana-25/rust-actions-example/actions/runs/14812038654)
 ![pull_request](/images/rust-actions/pull_request_result.png)
 
 ### Release
 
+Releaseを作成すると、以下のように自動的にビルドとリリースが行われます。
+
+[https://github.com/Walkmana-25/rust-actions-example/actions/runs/14812067267](https://github.com/Walkmana-25/rust-actions-example/actions/runs/14812067267)
 ![release](/images/rust-actions/releases_result.png)
+[https://github.com/Walkmana-25/rust-actions-example/releases/tag/v0.0.6](https://github.com/Walkmana-25/rust-actions-example/releases/tag/v0.0.6)
 ![artifact](/images/rust-actions/releases_artifact.png)
