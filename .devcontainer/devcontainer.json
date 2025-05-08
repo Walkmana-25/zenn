@@ -12,8 +12,7 @@
 	"appPort": [
 		8000
 	],
-	"image": "mcr.microsoft.com/vscode/devcontainers/universal:latest",
-	"postCreateCommand": "npx zenn",
+	"postCreateCommand": "npx zenn &",
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 		
