@@ -54,12 +54,12 @@ sh-3.2$ tree -C -a -I "target" -I ".git"
 .
 |-- .github
 |   `-- workflows
-|       |-- release.yml
-|       `-- testing.yml
+|       |-- release.yml #GitHub Releaseをトリガーにしたワークフロー
+|       `-- testing.yml #Pull Request時に実行されるワークフロー
 |-- .gitignore
 |-- Cargo.lock
 |-- Cargo.toml
-|-- Cross.toml
+|-- Cross.toml #Linuxでのクロスコンパイル用の設定ファイル
 |-- LICENSE
 |-- README.md
 |-- doc.md
