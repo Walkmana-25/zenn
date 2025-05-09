@@ -3,7 +3,7 @@ title: "Rust+Github Actionsで、ReleaseまでカバーしたCICDを構築する
 emoji: "⛳"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["rust", "github", "cicd", "actions"]
-published: false
+published: true
 ---
 
 ## はじめに
